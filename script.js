@@ -132,18 +132,17 @@ contactForm.addEventListener('submit', function (e) {
   urlParams.append('message', contactForm.querySelector('#message').value.trim());
 
   // Send via secure Google Apps Script endpoint (email address is never exposed in client code)
+  // Using no-cors mode because Google Apps Script does not send CORS headers for cross-origin requests.
+  // A completed fetch (even opaque) means the request was received by the server.
   fetch('https://script.google.com/macros/s/AKfycbw6XJoUR206Zy8ixn8Xz0WY16PbWGmJRlJcKXmMpF9gysqK7IMD-1Y3k427NWfE8k3j-g/exec', {
     method: 'POST',
+    mode: 'no-cors',
     body: urlParams
   })
-  .then(response => response.json())
-  .then(data => {
-    if (data.status === 'success') {
-      contactForm.reset();
-      showSuccess('Thank you for your enquiry. We will be in touch shortly.');
-    } else {
-      showError('Sorry, your message could not be sent. Please try again.');
-    }
+  .then(() => {
+    // no-cors returns an opaque response — any completed fetch means the server received the data
+    contactForm.reset();
+    showSuccess('Thank you for your enquiry. We will be in touch shortly.');
   })
   .catch(() => {
     showError('A network error occurred. Please try again or contact us directly.');
