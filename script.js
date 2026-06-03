@@ -123,27 +123,26 @@ contactForm.addEventListener('submit', function (e) {
   formSuccess.style.display = 'none';
   formError.style.display = 'none';
 
-  // Build form data
-  const formData = new FormData(contactForm);
+  // Build URL-encoded form data for Google Apps Script
+  const urlParams = new URLSearchParams();
+  urlParams.append('name', contactForm.querySelector('#name').value.trim());
+  urlParams.append('email', contactForm.querySelector('#email').value.trim());
+  urlParams.append('company', (contactForm.querySelector('#company') ? contactForm.querySelector('#company').value.trim() : ''));
+  urlParams.append('subject', (contactForm.querySelector('#subject') ? contactForm.querySelector('#subject').value.trim() : 'Website Enquiry'));
+  urlParams.append('message', contactForm.querySelector('#message').value.trim());
 
-  // Send via secure form endpoint (email address is never exposed in client code)
-  fetch('https://formspree.io/f/xpwrjkqo', {
+  // Send via secure Google Apps Script endpoint (email address is never exposed in client code)
+  fetch('https://script.google.com/macros/s/AKfycbw6XJoUR206Zy8ixn8Xz0WY16PbWGmJRlJcKXmMpF9gysqK7IMD-1Y3k427NWfE8k3j-g/exec', {
     method: 'POST',
-    body: formData,
-    headers: { 'Accept': 'application/json' }
+    body: urlParams
   })
-  .then(response => {
-    if (response.ok) {
+  .then(response => response.json())
+  .then(data => {
+    if (data.status === 'success') {
       contactForm.reset();
       showSuccess('Thank you for your enquiry. We will be in touch shortly.');
     } else {
-      return response.json().then(data => {
-        if (data.errors) {
-          showError(data.errors.map(e => e.message).join(', '));
-        } else {
-          showError('Sorry, your message could not be sent. Please try again.');
-        }
-      });
+      showError('Sorry, your message could not be sent. Please try again.');
     }
   })
   .catch(() => {
