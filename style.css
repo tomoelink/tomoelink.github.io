@@ -168,8 +168,8 @@ img { max-width: 100%; display: block; }
   background: #fff;
   padding: 2px;
 }
-.logo-tomoe { color: #fff; }
-.logo-link { color: #fff; }
+.logo-tomoe { color: #C9A84C; }
+.logo-link { color: #C9A84C; }
 
 .nav-links {
   display: flex;
