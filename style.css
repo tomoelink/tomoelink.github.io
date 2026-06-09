@@ -169,7 +169,7 @@ img { max-width: 100%; display: block; }
   padding: 2px;
 }
 .logo-tomoe { color: #fff; }
-.logo-link { color: #C9A84C; }
+.logo-link { color: #fff; }
 
 .nav-links {
   display: flex;
@@ -272,7 +272,7 @@ img { max-width: 100%; display: block; }
   line-height: 1.2;
   margin-bottom: 24px;
 }
-.hero h1 .accent { color: #C9A84C; }
+.hero h1 .accent { color: #fff; }
 .hero-sub {
   font-size: 1.1rem;
   color: rgba(255,255,255,0.82);
