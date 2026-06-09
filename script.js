@@ -131,13 +131,12 @@ contactForm.addEventListener('submit', function (e) {
   urlParams.append('subject', (contactForm.querySelector('#subject') ? contactForm.querySelector('#subject').value.trim() : 'Website Enquiry'));
   urlParams.append('message', contactForm.querySelector('#message').value.trim());
 
-  // Send via secure Google Apps Script endpoint (email address is never exposed in client code)
-  // Using no-cors mode because Google Apps Script does not send CORS headers for cross-origin requests.
-  // A completed fetch (even opaque) means the request was received by the server.
-  fetch('https://script.google.com/macros/s/AKfycbxzAx9HbmduCMOenxHOfcRhg-8tovuSMTBJPKC-IIz4tfMcgs9Qh3MbesmrwisYUSdDdw/exec', {
-    method: 'POST',
-    mode: 'no-cors',
-    body: urlParams
+  // Send via Google Apps Script endpoint using GET with query parameters.
+  // GET requests work reliably from static GitHub Pages sites without CORS issues.
+  const gasURL = 'https://script.google.com/macros/s/AKfycbxzAx9HbmduCMOenxHOfcRhg-8tovuSMTBJPKC-IIz4tfMcgs9Qh3MbesmrwisYUSdDdw/exec?' + urlParams.toString();
+  fetch(gasURL, {
+    method: 'GET',
+    mode: 'no-cors'
   })
   .then(() => {
     // no-cors returns an opaque response — any completed fetch means the server received the data
